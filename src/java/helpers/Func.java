@@ -29,6 +29,29 @@ public class Func {
     public static final long FIVE_MONTH = ONE_MONTH * 5;
     public static final long TWO_YEARS = ONE_MONTH * 24;
     
+    public static String getColor(String code) {
+        /**
+         * 1. blue.
+         * 2. green.
+         * 3. purple.
+         * 4. brown.
+         * 5. yellow.
+         */
+        if (code.equals("1")) {
+            return "rgba(0,0,200";
+        } else if (code.equals("2")) {
+            return "rgba(0,200,0";
+        } else if (code.equals("3")) {
+            return "rgba(200,0,200";
+        } else if (code.equals("4")) {
+            return "rgba(102,51,0";
+        } else if (code.equals("5")) {
+            return "rgba(200,200,0";
+        } else {
+            return "rgba(200,200,200";
+        }
+    }
+    
     public static void setWarningMonth(long month) {
         SIX_MONTH = ONE_MONTH * month;
     }

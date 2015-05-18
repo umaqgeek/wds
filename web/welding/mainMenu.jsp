@@ -1,3 +1,4 @@
+<%@page import="controllers.ReadFiles"%>
 <%@page import="controllers.Starter"%>
 <%
 String w = request.getParameter("w");
@@ -5,6 +6,7 @@ String w = request.getParameter("w");
 if(Integer.parseInt(w) >= 1 && Integer.parseInt(w) <= 11) {
     //Starter.setUrl_content("welding"+w+"/mainMenu.jsp");
     session.setAttribute("url_content", "welding"+w+"/mainMenu.jsp");
+    session.setAttribute("pageChoosen", ReadFiles.START_PATH+"/");
 } else {
     //Starter.setUrl_content("admin/mainMenu.jsp");
     session.setAttribute("url_content", "admin/mainMenu.jsp");

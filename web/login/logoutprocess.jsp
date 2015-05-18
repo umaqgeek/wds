@@ -13,5 +13,6 @@ session.setAttribute("ut_id", 0);
 session.setAttribute("ut_desc", "");
 session.setAttribute("url_stat", 1);
 session.setAttribute("loggedIn", "false");
+session.setAttribute("fileExcel", "");
 response.sendRedirect("../index.jsp");
 %>

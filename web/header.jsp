@@ -46,7 +46,11 @@ if(session.getAttribute("url_stat") == "1" || session.getAttribute("loggedIn") =
   <link href="assets/css/custom.css" rel="stylesheet">
   <link rel="shortcut icon" href="assets/images/technipback.png">
   <link rel="shortcut icon" href="assets/images/favicon.html">
+  
 <script src="assets/js/jquery-1.10.2.min.js"></script>
+
+<script src="assets/js/Chart.js"></script>
+
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
       <!--[if lt IE 9]>
       <script src="js/html5shiv.js"></script>

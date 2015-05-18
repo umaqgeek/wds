@@ -1,3 +1,4 @@
+<%@page import="controllers.ReadFiles"%>
 <%@page import="sun.misc.UCDecoder"%>
 <%@page import="models.User"%>
 <%@page import="java.sql.ResultSet"%>
@@ -51,6 +52,8 @@ if(stat) {
         session.setAttribute("url_content", path1);
         session.setAttribute("url_menu", menu1);
         session.setAttribute("url_stat", gol1);
+        session.setAttribute("pageChoosen", ReadFiles.START_PATH+"/");
+        session.setAttribute("fileExcel", "");
         response.sendRedirect("../index.jsp");
     }
 } else {
