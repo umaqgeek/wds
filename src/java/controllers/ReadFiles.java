@@ -30,12 +30,16 @@ public class ReadFiles {
         
         try {
             for (File file : listOfFiles) {
+                boolean stat = true;
                 if (file.isFile()) {
                     status = 1;
+                    stat = file.getName().substring(0, 2).equals("S_");
                 } else if (file.isDirectory()) {
                     status = 2;
                 }
-                f.add(status + "|" + file.getName());
+                if (stat) {
+                    f.add(status + "|" + file.getName());
+                }
             }
         } catch (Exception e) {
         }

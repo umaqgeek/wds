@@ -38,15 +38,35 @@ public class Func {
          * 5. yellow.
          */
         if (code.equals("1")) {
-            return "rgba(0,0,200";
+            return "rgba(255,0,0";
         } else if (code.equals("2")) {
-            return "rgba(0,200,0";
+            return "rgba(0,255,0";
         } else if (code.equals("3")) {
-            return "rgba(200,0,200";
+            return "rgba(0,0,255";
         } else if (code.equals("4")) {
-            return "rgba(102,51,0";
+            return "rgba(255,255,0";
         } else if (code.equals("5")) {
-            return "rgba(200,200,0";
+            return "rgba(255,0,255";
+        } else if (code.equals("6")) {
+            return "rgba(0,255,255";
+        } else if (code.equals("7")) {
+            return "rgba(180,180,180";
+        } else if (code.equals("8")) {
+            return "rgba(170,170,0";
+        } else if (code.equals("9")) {
+            return "rgba(10,200,255";
+        } else if (code.equals("10")) {
+            return "rgba(255,130,50";
+        } else if (code.equals("11")) {
+            return "rgba(255,15,135";
+        } else if (code.equals("12")) {
+            return "rgba(0,155,155";
+        } else if (code.equals("13")) {
+            return "rgba(134,255,140";
+        } else if (code.equals("14")) {
+            return "rgba(170,10,175";
+        } else if (code.equals("15")) {
+            return "rgba(0,200,200";
         } else {
             return "rgba(200,200,200";
         }

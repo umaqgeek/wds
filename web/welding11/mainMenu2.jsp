@@ -59,7 +59,7 @@
             session.setAttribute("url_stat", 2);
             response.sendRedirect("../index.jsp");
         } else {
-            session.setAttribute("fileExcel", "");
+            //session.setAttribute("fileExcel", "");
             session.setAttribute("url_content", "welding11/mainMenu.jsp");
             session.setAttribute("url_menu", "menu/menuAdmin.jsp");
             session.setAttribute("url_stat", 2);

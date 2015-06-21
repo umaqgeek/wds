@@ -55,7 +55,7 @@
     ArrayList<String> dataXe1 = new ArrayList<String>();
     ArrayList<String> dataXe2 = new ArrayList<String>();
     
-    int limit = 200;
+    int limit = 2000;
     double avgA[] = new double[limit];
     double avgB[] = new double[limit];
     double avgC[] = new double[limit];
@@ -214,20 +214,29 @@
 <div class="row">
     <div class="col-md-6">
         <div class="panel-body">
-            <a class="tridik btn btn-success" href="welding/mainMenu.jsp?w=11">Back</a>
+            <a class="tridik btn btn-success" href="welding11/mainMenu2.jsp?p=&c=<%=session.getAttribute("pageChoosen") %>">Back</a>
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col-md-6">
         <div class="panel-body">
-            <a class="tridik btn btn-success" href="#!" onclick="window.print();">Print</a>
+            <a class="tridik btn btn-success" href="#!" id="print1">Print</a>
         </div>
     </div>
 </div>
+        
+<script>
+$(document).ready(function() {
+    $("#print1").click(function() {
+        $("#form1").submit();
+    });
+});
+</script>
 
+<form method="post" action="welding11/print.jsp" id="form1">
 <div class="row">
-    <div class="col-md-6 col-md-offset-1">
+    <div class="col-md-7" style="margin-left:1%;" id="graf1">
         <h4>Voltage (Tolerance <%=tolerance1 %>%)</h4>
         <table class="table table-striped">
             <tr>
@@ -251,11 +260,45 @@
             </tr>
 <% } %>
         </table>
-        <canvas id="canvas1"></canvas>
+        <table>
+            <tr>
+                <td><strong>Voltage</strong></td>
+                <td width="100%" height="100%"><canvas id="canvas1"></canvas></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td align="center"><strong>Time</strong></td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-4">
+        <table class="table">
+            <tr>
+                <th>TOLERANCE (%)</th>
+                <th>:</th>
+                <th>
+                    <input type="text" id="tol1" name="tol1" class="form-control" value="5" />
+                </th>
+            </tr>
+            <tr>
+                <th>Comment</th>
+                <th>:</th>
+                <th>
+                    <textarea class="form-control" name="komen1"></textarea>
+                </th>
+            </tr>
+            <tr>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>
+                    <button type="button" id="adjust1">Adjust</button>
+                </th>
+            </tr>
+        </table>
     </div>
 </div>
 <div class="row">
-    <div class="col-md-6 col-md-offset-1">
+    <div class="col-md-7" style="margin-left:1%;" id="graf2">
         <h4>Current (Tolerance <%=tolerance2 %>%)</h4>
         <table class="table table-striped">
             <tr>
@@ -279,11 +322,45 @@
             </tr>
 <% } %>
         </table>
-        <canvas id="canvas2"></canvas>
+        <table>
+            <tr>
+                <td><strong>Current</strong></td>
+                <td width="100%" height="100%"><canvas id="canvas2"></canvas></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td align="center"><strong>Time</strong></td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-4">
+        <table class="table">
+            <tr>
+                <th>TOLERANCE (%)</th>
+                <th>:</th>
+                <th>
+                    <input type="text" id="tol2" name="tol2" class="form-control" value="5" />
+                </th>
+            </tr>
+            <tr>
+                <th>Comment</th>
+                <th>:</th>
+                <th>
+                    <textarea class="form-control" name="komen2"></textarea>
+                </th>
+            </tr>
+            <tr>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>
+                    <button type="button" id="adjust2">Adjust</button>
+                </th>
+            </tr>
+        </table>
     </div>
 </div>
 <div class="row">
-    <div class="col-md-6 col-md-offset-1">
+    <div class="col-md-7" style="margin-left:1%;" id="graf3">
         <h4>Power (Tolerance <%=tolerance3 %>%)</h4>
         <table class="table table-striped">
             <tr>
@@ -307,11 +384,45 @@
             </tr>
 <% } %>
         </table>
-        <canvas id="canvas3"></canvas>
+        <table>
+            <tr>
+                <td><strong>Power</strong></td>
+                <td width="100%" height="100%"><canvas id="canvas3"></canvas></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td align="center"><strong>Time</strong></td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-4">
+        <table class="table">
+            <tr>
+                <th>TOLERANCE (%)</th>
+                <th>:</th>
+                <th>
+                    <input type="text" id="tol3" name="tol3" class="form-control" value="5" />
+                </th>
+            </tr>
+            <tr>
+                <th>Comment</th>
+                <th>:</th>
+                <th>
+                    <textarea class="form-control" name="komen3"></textarea>
+                </th>
+            </tr>
+            <tr>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>
+                    <button type="button" id="adjust3">Adjust</button>
+                </th>
+            </tr>
+        </table>
     </div>
 </div>
 <div class="row">
-    <div class="col-md-6 col-md-offset-1">
+    <div class="col-md-7" style="margin-left:1%;" id="graf4">
         <h4>Jaw Displacement (Tolerance <%=tolerance4 %>%)</h4>
         <table class="table table-striped">
             <tr>
@@ -335,11 +446,45 @@
             </tr>
 <% } %>
         </table>
-        <canvas id="canvas4"></canvas>
+        <table>
+            <tr>
+                <td><strong>Jaw Displacement</strong></td>
+                <td width="100%" height="100%"><canvas id="canvas4"></canvas></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td align="center"><strong>Time</strong></td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-4">
+        <table class="table">
+            <tr>
+                <th>TOLERANCE (%)</th>
+                <th>:</th>
+                <th>
+                    <input type="text" id="tol4" name="tol4" class="form-control" value="5" />
+                </th>
+            </tr>
+            <tr>
+                <th>Comment</th>
+                <th>:</th>
+                <th>
+                    <textarea class="form-control" name="komen4"></textarea>
+                </th>
+            </tr>
+            <tr>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>
+                    <button type="button" id="adjust4">Adjust</button>
+                </th>
+            </tr>
+        </table>
     </div>
 </div>
 <div class="row">
-    <div class="col-md-6 col-md-offset-1">
+    <div class="col-md-7" style="margin-left:1%;" id="graf5">
         <h4>Pressure 1 (Tolerance <%=tolerance51 %>%) &amp; Pressure 2 (Tolerance <%=tolerance52 %>%)</h4>
         <table class="table table-striped">
             <tr>
@@ -373,9 +518,51 @@
             </tr>
 <% } %>
         </table>
-        <canvas id="canvas5"></canvas>
+        <table>
+            <tr>
+                <td><strong>Pressure</strong></td>
+                <td width="100%" height="100%"><canvas id="canvas5"></canvas></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td align="center"><strong>Time</strong></td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-4">
+        <table class="table">
+            <tr>
+                <th>TOLERANCE 1 (%)</th>
+                <th>:</th>
+                <th>
+                    <input type="text" id="tol51" name="tol51" class="form-control" value="5" />
+                </th>
+            </tr>
+            <tr>
+                <th>TOLERANCE 2 (%)</th>
+                <th>:</th>
+                <th>
+                    <input type="text" id="tol52" name="tol52" class="form-control" value="5" />
+                </th>
+            </tr>
+            <tr>
+                <th>Comment</th>
+                <th>:</th>
+                <th>
+                    <textarea class="form-control" name="komen5"></textarea>
+                </th>
+            </tr>
+            <tr>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>
+                    <button type="button" id="adjust5">Adjust</button>
+                </th>
+            </tr>
+        </table>
     </div>
 </div>
+</form>
 
 <script>
 var lineChartData1 = {
@@ -627,26 +814,94 @@ datasets : [
     data: [<%=dataE2tol2 %>]
 }]};
 
-window.onload = function () {
-    var ctx1 = document.getElementById("canvas1").getContext("2d");
-    var ctx2 = document.getElementById("canvas2").getContext("2d");
-    var ctx3 = document.getElementById("canvas3").getContext("2d");
-    var ctx4 = document.getElementById("canvas4").getContext("2d");
-    var ctx5 = document.getElementById("canvas5").getContext("2d");
-    window.myLine = new Chart(ctx1).Line(lineChartData1, {
-        responsive: true
+//window.onload = function () {
+    //var ctx1 = document.getElementById("canvas1").getContext("2d");
+    //var ctx2 = document.getElementById("canvas2").getContext("2d");
+    //var ctx3 = document.getElementById("canvas3").getContext("2d");
+    //var ctx4 = document.getElementById("canvas4").getContext("2d");
+    //var ctx5 = document.getElementById("canvas5").getContext("2d");
+    var options = {
+        responsive: true,
+        pointDot: false
+    };
+    //window.myLine = new Chart(ctx1).Line(lineChartData1, options);
+    //window.myLine = new Chart(ctx2).Line(lineChartData2, options);
+    //window.myLine = new Chart(ctx3).Line(lineChartData3, options);
+    //window.myLine = new Chart(ctx4).Line(lineChartData4, options);
+    //window.myLine = new Chart(ctx5).Line(lineChartData5, options);
+//}
+
+$.post( "welding11/ajax/getGraf1.jsp", { 
+    tol: 5 
+}).done(function( data ) {
+    $("#graf1").html( data );
+});
+$("#adjust1").click(function() {
+    var tol1 = $("#tol1").val();
+    $.post( "welding11/ajax/getGraf1.jsp", { 
+        tol: tol1 
+    }).done(function( data ) {
+        $("#graf1").html( data );
     });
-    window.myLine = new Chart(ctx2).Line(lineChartData2, {
-        responsive: true
+});
+
+$.post( "welding11/ajax/getGraf2.jsp", { 
+    tol: 5 
+}).done(function( data ) {
+    $("#graf2").html( data );
+});
+$("#adjust2").click(function() {
+    var tol2 = $("#tol2").val();
+    $.post( "welding11/ajax/getGraf2.jsp", { 
+        tol: tol2 
+    }).done(function( data ) {
+        $("#graf2").html( data );
     });
-    window.myLine = new Chart(ctx3).Line(lineChartData3, {
-        responsive: true
+});
+
+$.post( "welding11/ajax/getGraf3.jsp", { 
+    tol: 5 
+}).done(function( data ) {
+    $("#graf3").html( data );
+});
+$("#adjust3").click(function() {
+    var tol3 = $("#tol3").val();
+    $.post( "welding11/ajax/getGraf3.jsp", { 
+        tol: tol3 
+    }).done(function( data ) {
+        $("#graf3").html( data );
     });
-    window.myLine = new Chart(ctx4).Line(lineChartData4, {
-        responsive: true
+});
+
+$.post( "welding11/ajax/getGraf4.jsp", { 
+    tol: 5 
+}).done(function( data ) {
+    $("#graf4").html( data );
+});
+$("#adjust4").click(function() {
+    var tol4 = $("#tol4").val();
+    $.post( "welding11/ajax/getGraf4.jsp", { 
+        tol: tol4 
+    }).done(function( data ) {
+        $("#graf4").html( data );
     });
-    window.myLine = new Chart(ctx5).Line(lineChartData5, {
-        responsive: true
+});
+
+$.post( "welding11/ajax/getGraf5.jsp", { 
+    tol: 5,
+    tol2: 5
+}).done(function( data ) {
+    $("#graf5").html( data );
+});
+$("#adjust5").click(function() {
+    var tol51 = $("#tol51").val();
+    var tol52 = $("#tol52").val();
+    $.post( "welding11/ajax/getGraf5.jsp", { 
+        tol: tol51,
+        tol2: tol52
+    }).done(function( data ) {
+        $("#graf5").html( data );
     });
-}
+});
 </script>
+
