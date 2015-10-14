@@ -124,6 +124,8 @@ ArrayList<ArrayList<String>> wc = welding_child.getSearchAll(w_sfnumber, fp_id, 
              <th>Welding Date</th>
              
              <th>Cause of Failure</th>
+             
+             <th>Weld Number</th>
            </tr>
         
              <%
@@ -165,6 +167,8 @@ ArrayList<ArrayList<String>> wc = welding_child.getSearchAll(w_sfnumber, fp_id, 
              <td><%=Func.getDateTime(wc.get(i).get(20)) %></td>
 
             <td><%=wc.get(i).get(24) %></td>
+            
+            <td><%=wc.get(i).get(31) %></td>
           </tr>
           <%
           if(wc.get(i).get(21).equals("1")) {

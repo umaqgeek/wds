@@ -329,27 +329,29 @@ function export_excel1() {
              
              <th>Family</th>
              
-             <th>SF Number</th>
-             <th>Fabrication Phase</th>
-             <th>Manuf. Machine</th>
+             <th>SF No.</th>
+             <th>Fabric. Phase</th>
+             <th>Manuf. Mach.</th>
              <th>Category</th>
              
              <th>Size (wire / strip)</th>
              <th>Supplier</th>
              <th>STA (Grade)</th>
              <th>Welder Name</th>
-             <th>Welder Status</th>
-             <th>Welding Machine</th>
+             <th>Welder Stats</th>
+             <th>Weld Mach.</th>
              
-             <th>Weld Duration (Sec)</th>
+             <th>Weld Dur (Sec)</th>
              <th>Spool No.</th>
-             <th>Bobbin No.</th>
+             <th>Bob. No.</th>
              
              <th>Weld Status</th>
              
-             <th>Welding Date</th>
+             <th>Weld Date</th>
              
-             <th>Cause of Failure</th>
+             <th>Cause of Fail</th>
+             
+             <th>Weld No.</th>
            </tr>
          </thead>
          <tbody>
@@ -392,6 +394,8 @@ function export_excel1() {
              <td><%=Func.getDateTime(wc.get(i).get(20)) %></td>
 
             <td><%=wc.get(i).get(24) %></td>
+            
+            <td><%=wc.get(i).get(31) %></td>
           </tr>
           <%
           if(wc.get(i).get(21).equals("1")) {

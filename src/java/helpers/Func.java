@@ -29,6 +29,10 @@ public class Func {
     public static final long FIVE_MONTH = ONE_MONTH * 5;
     public static final long TWO_YEARS = ONE_MONTH * 24;
     
+    public static final int START_AT = 0;
+    public static final int LENGTH_SIZE = 200;
+    public static final int LIMIT_ROW_SIZE = 300;
+    
     public static String getColor(String code) {
         /**
          * 1. blue.
@@ -70,6 +74,59 @@ public class Func {
         } else {
             return "rgba(200,200,200";
         }
+    }
+    
+    public static String getColor2(String colorCode) {
+        /**
+         * <option value="1" <% if(colorStatus.equals("1")) { out.print("selected"); } %>>Red</option>
+                         <option value="2" <% if(colorStatus.equals("2")) { out.print("selected"); } %>>Green</option>
+                         <option value="3" <% if(colorStatus.equals("3")) { out.print("selected"); } %>>Dark Blue</option>
+                         <option value="4" <% if(colorStatus.equals("4")) { out.print("selected"); } %>>Yellow</option>
+                         <option value="5" <% if(colorStatus.equals("5")) { out.print("selected"); } %>>Light Purple</option>
+                         <option value="6" <% if(colorStatus.equals("6")) { out.print("selected"); } %>>Cyan</option>
+                         <option value="7" <% if(colorStatus.equals("7")) { out.print("selected"); } %>>Grey</option>
+                         <option value="8" <% if(colorStatus.equals("8")) { out.print("selected"); } %>>Ugly Green</option>
+                         <option value="9" <% if(colorStatus.equals("9")) { out.print("selected"); } %>>Blue</option>
+                         <option value="10" <% if(colorStatus.equals("10")) { out.print("selected"); } %>>Light Brown</option>
+                         <option value="11" <% if(colorStatus.equals("11")) { out.print("selected"); } %>>Dark Pink</option>
+                         <option value="12" <% if(colorStatus.equals("12")) { out.print("selected"); } %>>Dark Green</option>
+                         <option value="13" <% if(colorStatus.equals("13")) { out.print("selected"); } %>>Light Green</option>
+                         <option value="14" <% if(colorStatus.equals("14")) { out.print("selected"); } %>>Dark Purple</option>
+                         <option value="15" <% if(colorStatus.equals("15")) { out.print("selected"); } %>>Dark Cyan</option>
+         */
+        switch (colorCode) {
+            case "1":
+                return "Red";
+            case "2":
+                return "Green";
+            case "3":
+                return "Dark Blue";
+            case "4":
+                return "Yellow";
+            case "5":
+                return "Light Purple";
+            case "6":
+                return "Cyan";
+            case "7":
+                return "Grey";
+            case "8":
+                return "Ugly Green";
+            case "9":
+                return "Blue";
+            case "10":
+                return "Light Brown";
+            case "11":
+                return "Dark Pink";
+            case "12":
+                return "Dark Green";
+            case "13":
+                return "Light Green";
+            case "14":
+                return "Dark Purple";
+            case "15":
+                return "Dark Cyan";
+        }
+        return "-";
     }
     
     public static void setWarningMonth(long month) {

@@ -1,3 +1,4 @@
+<%@page import="controllers.ReadFiles"%>
 <%@page import="java.util.Properties"%>
 <%@page import="java.util.ArrayList"%>
 <%
@@ -16,7 +17,7 @@
             tolerance52 = request.getParameter("tol52");
             String pageNext = request.getParameter("p");
             String path = request.getParameter("c");
-            session.setAttribute("pageChoosen", path+""+pageNext+"/");
+            session.setAttribute("pageChoosen", path+""+pageNext+ReadFiles.START_PATH_SEPARATOR);
         } catch (Exception e) {
         }
     
@@ -24,10 +25,11 @@
     try {
         ArrayList<String> files = new ArrayList<String>();
         ArrayList<String> files2 = new ArrayList<String>();
-        for (int i = 0; i < 200; i++) {
+        for (int i = 0; i < ReadFiles.NUM_OF_FILES; i++) {
             try {
                 String file = request.getParameter("cbx_"+i).split("\\|")[2];
                 if (file != null) {
+                    //System.out.println(file);
                     files.add(file);
                 }
             } catch (Exception e) {
@@ -36,6 +38,7 @@
                 String file2 = request.getParameter("cbx2_"+i).split("\\|")[2];
                 String color2 = request.getParameter("color_"+i);
                 if (file2 != null) {
+                    //System.out.println(file2+"|"+color2);
                     files2.add(file2+"|"+color2);
                 }
             } catch (Exception e) {

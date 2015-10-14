@@ -171,7 +171,8 @@ public class Welding_child {
                     + "cat.cat_desc, " //27
                     + "wc.wc_weldduration, " //28
                     + "wc.wc_spoolnumber, " //29
-                    + "wc.wc_bobbinnumber "); //30
+                    + "wc.wc_bobbinnumber, " //30
+                    + "wc.wc_weldingnumber "); //31
             query.from(query, "welding_child wc");
             query.join(query, "welding w", "w.w_id = wc.w_id", "left");
             query.join(query, "welder we", "wc.we_id = we.we_id", "left");
@@ -256,6 +257,9 @@ public class Welding_child {
                 }
                 simpan_ii[ii] = ii++;
             }
+            
+            query.or_where(query, "1<>1");
+            
             int jj = 0;
             //Query.order_by("wc.wc_id", "desc");
             query.limit(query, "500000");
@@ -312,7 +316,7 @@ public class Welding_child {
             query.setRs(query.getPs().executeQuery());
             while (query.getRs().next()) {
                 ArrayList<String> d = new ArrayList<String>();
-                for(int i = 1; i <= 31; i++) {
+                for(int i = 1; i <= 32; i++) {
                     d.add(query.getRs().getString(i));
                 }
                 data.add(d);

@@ -1,3 +1,4 @@
+<%@page import="helpers.Func"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="controllers.ReadFiles"%>
 <%
@@ -40,14 +41,15 @@ ArrayList<String> filex3 = new ArrayList<String>();
 try {
     ArrayList<ArrayList<String>> files = (ArrayList<ArrayList<String>>) session.getAttribute("fileExcel");
     for (String f: files.get(0)) {
-        String pecah[] = f.split("/");
+        String pecah[] = f.split(ReadFiles.START_PATH_SEPARATOR);
         filex1.add(pecah[pecah.length-1]);
     }
     for (String f: files.get(1)) {
-        String pecah[] = f.split("/");
+        String pecah[] = f.split(ReadFiles.START_PATH_SEPARATOR);
         filex2.add(pecah[pecah.length-1].split("\\|")[0]);
         filex3.add(pecah[pecah.length-1].split("\\|")[0]+"|"+pecah[pecah.length-1].split("\\|")[1]);
     }
+//    out.print(files+"<br />");
 } catch (Exception e) {
 }
 %>
@@ -69,12 +71,12 @@ try {
             <%
 
 String pageChoosen = String.valueOf(session.getAttribute("pageChoosen"));
-String pathPecah[] = (pageChoosen != null) ? (pageChoosen.split("/")) : (ReadFiles.START_PATH.split("/"));
+String pathPecah[] = (pageChoosen != null) ? (pageChoosen.split(ReadFiles.START_PATH_SEPARATOR)) : (ReadFiles.START_PATH.split(ReadFiles.START_PATH_SEPARATOR));
 //out.print(pathPecah[ReadFiles.START_PATH_NUM]+" &gt;&gt; ");
 for (int i = ReadFiles.START_PATH_NUM; i < pathPecah.length-1; i++) {
     String pathTemp = "";
     for (int j = ReadFiles.START_PATH_NUM+1; j <= i; j++) {
-        pathTemp += "/" + pathPecah[j] + "/";
+        pathTemp += ReadFiles.START_PATH_SEPARATOR + pathPecah[j] + ReadFiles.START_PATH_SEPARATOR;
     }
     out.print("<a href='welding11/mainMenu2.jsp?p=" + pathTemp + "&c=" + ReadFiles.START_PATH + "'>" + pathPecah[i] + "</a> &gt;&gt; ");
 }
@@ -103,7 +105,22 @@ if (pathPecah.length > 0) {
          </thead>
          <tbody>
 <%
-ArrayList<String> rf = ReadFiles.read(pageChoosen);
+int start = Func.START_AT;
+int length = Func.LENGTH_SIZE;
+try {
+    start = Integer.parseInt(request.getParameter("start"));
+    length = Integer.parseInt(request.getParameter("length"));
+} catch (Exception e) {
+    start = Func.START_AT;
+    length = Func.LENGTH_SIZE;
+}
+String carian = "";
+try {
+    carian = request.getParameter("carian");
+} catch (Exception e) {
+    carian = "";
+}
+ArrayList<String> rf = ReadFiles.read(pageChoosen, start, length, carian);
 for (int i = 0; i < rf.size(); i++) {
     String pecah[] = rf.get(i).split("\\|");
     int isFilesOrFolders = Integer.parseInt(pecah[0]);
@@ -131,12 +148,12 @@ for (int i = 0; i < rf.size(); i++) {
                      <% if (statType) {
                          String status = "";
                          for (String st: filex1) {
-                             if (st.equals(fileName.split("/")[fileName.split("/").length-1])) {
+                             if (st.equals(fileName.split(ReadFiles.START_PATH_SEPARATOR)[fileName.split("/").length-1])) {
                                  status = "checked";
                              }
                          }
                      %>
-                     <input name="cbx_<%=i %>" type="checkbox" value="<%=name %>|<%=pageChoosen %>|<%=fileName %>" <%=status %> />
+                     <input name="cbx_<%=i %>" id="cbx_<%=i %>" type="checkbox" value="<%=name %>|<%=pageChoosen %>|<%=fileName %>" <%=status %> />
                      <% } %>
                      &nbsp;
                  </td>
@@ -145,18 +162,18 @@ for (int i = 0; i < rf.size(); i++) {
                          String status = "";
                          String colorStatus = "1";
                          for (String st: filex2) {
-                             if (st.equals(fileName.split("/")[fileName.split("/").length-1])) {
+                             if (st.equals(fileName.split(ReadFiles.START_PATH_SEPARATOR)[fileName.split(ReadFiles.START_PATH_SEPARATOR).length-1])) {
                                  status = "checked";
                              }
                          }
                          for (String st2: filex3) {
-                             if (st2.split("\\|")[0].equals(fileName.split("/")[fileName.split("/").length-1])) {
+                             if (st2.split("\\|")[0].equals(fileName.split(ReadFiles.START_PATH_SEPARATOR)[fileName.split(ReadFiles.START_PATH_SEPARATOR).length-1])) {
                                  colorStatus = st2.split("\\|")[1];
                              }
                          }
                      %>
-                     <input name="cbx2_<%=i %>" type="checkbox" value="<%=name %>|<%=pageChoosen %>|<%=fileName %>" <%=status %> />
-                     <select name="color_<%=i %>">
+                     <input name="cbx2_<%=i %>" id="cbx2_<%=i %>" type="checkbox" value="<%=name %>|<%=pageChoosen %>|<%=fileName %>" <%=status %> />
+                     <select name="color_<%=i %>" id="color_<%=i %>">
                          <option value="1" <% if(colorStatus.equals("1")) { out.print("selected"); } %>>Red</option>
                          <option value="2" <% if(colorStatus.equals("2")) { out.print("selected"); } %>>Green</option>
                          <option value="3" <% if(colorStatus.equals("3")) { out.print("selected"); } %>>Dark Blue</option>
@@ -177,57 +194,76 @@ for (int i = 0; i < rf.size(); i++) {
                      &nbsp;
                  </td>
              </tr>
-<%
-}
-%>
+<% } %>
            </tbody>
        </table>
-           
-           <div class="row" style="margin-top: 3%;">
-               <div class="col-md-11">
-                   <table>
-                       <tr>
-                           <th colspan="3">TOLERANCE (%)</th>
-                       </tr>
-                       <tr>
-                           <td>Voltage</td>
-                           <td>:</td>
-                           <td><input type="text" value="5" name="tol1" class="form-control" /></td>
-                       </tr>
-                       <tr>
-                           <td>Current</td>
-                           <td>:</td>
-                           <td><input type="text" value="5" name="tol2" class="form-control" /></td>
-                       </tr>
-                       <tr>
-                           <td>Power</td>
-                           <td>:</td>
-                           <td><input type="text" value="5" name="tol3" class="form-control" /></td>
-                       </tr>
-                       <tr>
-                           <td>Jaw Displacement</td>
-                           <td>:</td>
-                           <td><input type="text" value="5" name="tol4" class="form-control" /></td>
-                       </tr>
-                       <tr>
-                           <td>Pressure 1</td>
-                           <td>:</td>
-                           <td><input type="text" value="5" name="tol51" class="form-control" /></td>
-                       </tr>
-                       <tr>
-                           <td>Pressure 2</td>
-                           <td>:</td>
-                           <td><input type="text" value="5" name="tol52" class="form-control" /></td>
-                       </tr>
-                   </table>
-                   <br />
-                   <a class="tridik btn btn-success" href="#!" 
-                      onclick="document.getElementById('form1').submit();">Plot Graph</a>
-               </div>
-           </div>
-
 </form>
         </div>
     </div>
 </div>
+           
+           <div class="row">
+               <div class="col-md-11">&nbsp;&nbsp;
+                   Data from <%=start %> to <%=start+Func.LENGTH_SIZE %><br />
+                   &nbsp;&nbsp;
+                   [<a href="welding11/mainMenu3.jsp?start=0&length=<%=length %>">Start</a>]
+                   [<a href="welding11/mainMenu3.jsp?start=<%=(start-length<=0)?(0):(start-length) %>&length=<%=length %>">Previous</a>]
+                   [<a href="welding11/mainMenu3.jsp?start=<%=(start+length) %>&length=<%=length %>">Next</a>]<br />
+                   <form action="welding11/mainMenu3.jsp" method="post">
+                       &nbsp;&nbsp;Search: <input type="text" name="carian" />&nbsp;&nbsp;<button type="submit">Search</button>
+                   </form>
+               </div>
+           </div>
+               
+           <br />
+           
+           <div class="row">
+               <div class="col-md-12">
+                   <a class="tridik btn btn-success" href="#!" id="addtolist">Add To List</a>
+               </div>
+           </div>
+           
 
+
+<div id="paparCart1"></div>
+
+<script>
+$(document).ready(function() {
+    $.post( "welding11/ajax/getCart1.jsp", { 
+        pageChoosen: "<%=pageChoosen %>"
+    }).done(function( data ) {
+        $("#paparCart1").html( data );
+    });
+    $("#addtolist").click(function() {
+        for (i=0; i<<%=ReadFiles.NUM_OF_FILES %>; i++) {
+            if ($("#cbx_"+i).is( ":checked" )) {
+                var cbx_x = $("#cbx_"+i).val();
+                $.post( "welding11/ajax/setCart1.jsp", { 
+                    cbx_x: cbx_x
+                }).done(function( data ) {
+                    $.post( "welding11/ajax/getCart1.jsp", { 
+                        pageChoosen: "<%=pageChoosen %>"
+                    }).done(function( data1 ) {
+                        $("#paparCart1").html( data1 );
+                    });
+                });
+            }
+            if ($("#cbx2_"+i).is( ":checked" )) {
+                var cbx2_x = $("#cbx2_"+i).val();
+                var color_x = $("#color_"+i).val();
+                $.post( "welding11/ajax/setCart1.jsp", { 
+                    cbx2_x: cbx2_x,
+                    color_x: color_x
+                }).done(function( data ) {
+                    $.post( "welding11/ajax/getCart1.jsp", { 
+                        pageChoosen: "<%=pageChoosen %>"
+                    }).done(function( data1 ) {
+                        $("#paparCart1").html( data1 );
+                    });
+                });
+            }
+        }
+    });
+    
+});
+</script>

@@ -5,28 +5,34 @@
 <%@page import="java.util.Properties"%>
 <%@page import="helpers.ReadWriteExcel"%>
 <%
-    ArrayList<ArrayList<String>> files = (ArrayList<ArrayList<String>>) session.getAttribute("fileExcel");
+    ArrayList<ArrayList<String>> files = new ArrayList<ArrayList<String>>();
     
-    int tolerance1 = 0;
-    int tolerance2 = 0;
-    int tolerance3 = 0;
-    int tolerance4 = 0;
-    int tolerance51 = 0;
-    int tolerance52 = 0;
     try {
-        tolerance1 = Integer.parseInt(files.get(2).get(0));
-        tolerance2 = Integer.parseInt(files.get(2).get(1));
-        tolerance3 = Integer.parseInt(files.get(2).get(2));
-        tolerance4 = Integer.parseInt(files.get(2).get(3));
-        tolerance51 = Integer.parseInt(files.get(2).get(4));
-        tolerance52 = Integer.parseInt(files.get(2).get(5));
+        files = (ArrayList<ArrayList<String>>) session.getAttribute("fileExcel");
+        //out.print(files+"<br />");
     } catch (Exception e) {
-        tolerance1 = 0;
-        tolerance2 = 0;
-        tolerance3 = 0;
-        tolerance4 = 0;
-        tolerance51 = 0;
-        tolerance52 = 0;
+    }
+    
+    double tolerance1 = 0.0;
+    double tolerance2 = 0.0;
+    double tolerance3 = 0.0;
+    double tolerance4 = 0.0;
+    double tolerance51 = 0.0;
+    double tolerance52 = 0.0;
+    try {
+        tolerance1 = Double.parseDouble(files.get(2).get(0));
+        tolerance2 = Double.parseDouble(files.get(2).get(1));
+        tolerance3 = Double.parseDouble(files.get(2).get(2));
+        tolerance4 = Double.parseDouble(files.get(2).get(3));
+        tolerance51 = Double.parseDouble(files.get(2).get(4));
+        tolerance52 = Double.parseDouble(files.get(2).get(5));
+    } catch (Exception e) {
+        tolerance1 = 0.0;
+        tolerance2 = 0.0;
+        tolerance3 = 0.0;
+        tolerance4 = 0.0;
+        tolerance51 = 0.0;
+        tolerance52 = 0.0;
     }
     
     String label = "";
@@ -55,13 +61,14 @@
     ArrayList<String> dataXe1 = new ArrayList<String>();
     ArrayList<String> dataXe2 = new ArrayList<String>();
     
-    int limit = 2000;
+    int limit = Func.LIMIT_ROW_SIZE;
     double avgA[] = new double[limit];
     double avgB[] = new double[limit];
     double avgC[] = new double[limit];
     double avgD[] = new double[limit];
     double avgE1[] = new double[limit];
     double avgE2[] = new double[limit];
+    int avgT[] = new int[limit];
     
     for (int j = 0; j < limit; j++) {
         avgA[j] = 0;
@@ -70,6 +77,7 @@
         avgD[j] = 0;
         avgE1[j] = 0;
         avgE2[j] = 0;
+        avgT[j] = 0;
     }
     
     int filesSize2 = files.get(1).size();
@@ -117,7 +125,7 @@
         } catch (Exception e) {
             e.printStackTrace();
             session.setAttribute("fileExcel", "");
-                session.setAttribute("pageChoosen", ReadFiles.START_PATH + "/");
+                session.setAttribute("pageChoosen", ReadFiles.START_PATH + ReadFiles.START_PATH_SEPARATOR);
                 session.setAttribute("url_content", "welding11/mainMenu.jsp");
                 session.setAttribute("url_menu", "menu/menuAdmin.jsp");
                 session.setAttribute("url_stat", 2);
@@ -140,6 +148,7 @@
             String d[] = prop.getProperty("d").split("\\|");
             String e1[] = prop.getProperty("e1").split("\\|");
             String e2[] = prop.getProperty("e2").split("\\|");
+            String t[] = prop.getProperty("t").split("\\|");
             
             limit = (c.length < limit) ? (c.length) : (limit);
 
@@ -151,13 +160,14 @@
                 avgD[i] += Double.parseDouble(d[i]);
                 avgE1[i] += Double.parseDouble(e1[i]);
                 avgE2[i] += Double.parseDouble(e2[i]);
+                avgT[i] += Integer.parseInt(t[i]);
                 
             }
             
         } catch (Exception e) {
             e.printStackTrace();
             session.setAttribute("fileExcel", "");
-                session.setAttribute("pageChoosen", ReadFiles.START_PATH + "/");
+                session.setAttribute("pageChoosen", ReadFiles.START_PATH + ReadFiles.START_PATH_SEPARATOR);
                 session.setAttribute("url_content", "welding11/mainMenu.jsp");
                 session.setAttribute("url_menu", "menu/menuAdmin.jsp");
                 session.setAttribute("url_stat", 2);
@@ -167,7 +177,7 @@
     }
     
         for (int i = 0; i < limit-1; i++) {
-            label += "\"" + (i + 1) + "\",";
+            label += (avgT[i]/filesSize) + ",";
             dataA += (avgA[i]*1.0/filesSize) + ",";
             dataAtol1 += ((avgA[i]*1.0/filesSize)*((100+tolerance1)*1.0/100)) + ",";
             dataAtol2 += ((avgA[i]*1.0/filesSize)*((100-tolerance1)*1.0/100)) + ",";
@@ -187,7 +197,7 @@
             dataE2tol1 += ((avgE2[i]*1.0/filesSize)*((100+tolerance52)*1.0/100)) + ",";
             dataE2tol2 += ((avgE2[i]*1.0/filesSize)*((100-tolerance52)*1.0/100)) + ",";
         }
-        label += "\"" + (limit - 1) + "\"";
+        label += (avgT[limit - 1]/filesSize);
         dataA += (avgA[limit - 1]*1.0/filesSize);
         dataAtol1 += ((avgA[limit - 1]*1.0/filesSize)*((100+tolerance1)*1.0/100));
         dataAtol2 += ((avgA[limit - 1]*1.0/filesSize)*((100+tolerance1)*1.0/100));
@@ -254,7 +264,10 @@ $(document).ready(function() {
             </tr>
 <% for (int j = 0; j < dataXa.size(); j++) { %>
             <tr>
-                <td><%=dataXa.get(j).split("\\|")[1] %>&nbsp;</td>
+                <td><% 
+    String strplit[] = dataXa.get(j).split("\\|")[1].split(ReadFiles.START_PATH_SEPARATOR);
+    out.print(strplit[strplit.length-1]);
+                %>&nbsp;</td>
                 <td>:</td>
                 <td><div style="background-color:<%=dataXa.get(j).split("\\|")[2] %>,1);">&nbsp;</div></td>
             </tr>
@@ -262,12 +275,12 @@ $(document).ready(function() {
         </table>
         <table>
             <tr>
-                <td><strong>Voltage</strong></td>
+                <td><strong>Voltage (mV)</strong></td>
                 <td width="100%" height="100%"><canvas id="canvas1"></canvas></td>
             </tr>
             <tr>
                 <td></td>
-                <td align="center"><strong>Time</strong></td>
+                <td align="center"><strong>Time (ms)</strong></td>
             </tr>
         </table>
     </div>
@@ -316,7 +329,10 @@ $(document).ready(function() {
             </tr>
 <% for (int j = 0; j < dataXb.size(); j++) { %>
             <tr>
-                <td><%=dataXb.get(j).split("\\|")[1] %>&nbsp;</td>
+                <td><% 
+    String strplit[] = dataXb.get(j).split("\\|")[1].split(ReadFiles.START_PATH_SEPARATOR);
+    out.print(strplit[strplit.length-1]);
+                %>&nbsp;</td>
                 <td>:</td>
                 <td><div style="background-color:<%=dataXb.get(j).split("\\|")[2] %>,1);">&nbsp;</div></td>
             </tr>
@@ -324,12 +340,12 @@ $(document).ready(function() {
         </table>
         <table>
             <tr>
-                <td><strong>Current</strong></td>
+                <td><strong>Current (A)</strong></td>
                 <td width="100%" height="100%"><canvas id="canvas2"></canvas></td>
             </tr>
             <tr>
                 <td></td>
-                <td align="center"><strong>Time</strong></td>
+                <td align="center"><strong>Time (ms)</strong></td>
             </tr>
         </table>
     </div>
@@ -378,7 +394,10 @@ $(document).ready(function() {
             </tr>
 <% for (int j = 0; j < dataXc.size(); j++) { %>
             <tr>
-                <td><%=dataXc.get(j).split("\\|")[1] %>&nbsp;</td>
+                <td><% 
+    String strplit[] = dataXc.get(j).split("\\|")[1].split(ReadFiles.START_PATH_SEPARATOR);
+    out.print(strplit[strplit.length-1]);
+                %>&nbsp;</td>
                 <td>:</td>
                 <td><div style="background-color:<%=dataXc.get(j).split("\\|")[2] %>,1);">&nbsp;</div></td>
             </tr>
@@ -386,12 +405,12 @@ $(document).ready(function() {
         </table>
         <table>
             <tr>
-                <td><strong>Power</strong></td>
+                <td><strong>Power (bar)</strong></td>
                 <td width="100%" height="100%"><canvas id="canvas3"></canvas></td>
             </tr>
             <tr>
                 <td></td>
-                <td align="center"><strong>Time</strong></td>
+                <td align="center"><strong>Time (ms)</strong></td>
             </tr>
         </table>
     </div>
@@ -440,7 +459,10 @@ $(document).ready(function() {
             </tr>
 <% for (int j = 0; j < dataXd.size(); j++) { %>
             <tr>
-                <td><%=dataXd.get(j).split("\\|")[1] %>&nbsp;</td>
+                <td><% 
+    String strplit[] = dataXd.get(j).split("\\|")[1].split(ReadFiles.START_PATH_SEPARATOR);
+    out.print(strplit[strplit.length-1]);
+                %>&nbsp;</td>
                 <td>:</td>
                 <td><div style="background-color:<%=dataXd.get(j).split("\\|")[2] %>,1);">&nbsp;</div></td>
             </tr>
@@ -448,12 +470,12 @@ $(document).ready(function() {
         </table>
         <table>
             <tr>
-                <td><strong>Jaw Displacement</strong></td>
+                <td><strong>Jaw Displacement (mm)</strong></td>
                 <td width="100%" height="100%"><canvas id="canvas4"></canvas></td>
             </tr>
             <tr>
                 <td></td>
-                <td align="center"><strong>Time</strong></td>
+                <td align="center"><strong>Time (ms)</strong></td>
             </tr>
         </table>
     </div>
@@ -512,7 +534,10 @@ $(document).ready(function() {
             </tr>
 <% for (int j = 0; j < dataXe1.size(); j++) { %>
             <tr>
-                <td><%=dataXe1.get(j).split("\\|")[1] %>&nbsp;</td>
+                <td><% 
+    String strplit[] = dataXe1.get(j).split("\\|")[1].split(ReadFiles.START_PATH_SEPARATOR);
+    out.print(strplit[strplit.length-1]);
+                %>&nbsp;</td>
                 <td>:</td>
                 <td><div style="background-color:<%=dataXe1.get(j).split("\\|")[2] %>,1);">&nbsp;</div></td>
             </tr>
@@ -525,7 +550,7 @@ $(document).ready(function() {
             </tr>
             <tr>
                 <td></td>
-                <td align="center"><strong>Time</strong></td>
+                <td align="center"><strong>Time (ms)</strong></td>
             </tr>
         </table>
     </div>

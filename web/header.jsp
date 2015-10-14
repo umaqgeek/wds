@@ -351,6 +351,8 @@ function timerIncrement() {
 <script type="text/javascript">
     $(document).ready(function() {
         $('#example').dataTable();
+        $('#example2').dataTable();
+        $('#example3').dataTable();
          $('#example_wire').dataTable();
          $("#example_wire").css("width","90%");
     } );

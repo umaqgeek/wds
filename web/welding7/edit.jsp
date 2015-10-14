@@ -164,7 +164,7 @@ String weld_family[][] = component.getListFamilies();
             <label for="sg_id" class="col-lg-2 col-md-3 control-label">STA Grade</label>
             <div class="col-lg-10 col-md-9">
                 <select class="validate[required] form-control" data-prompt-position="topLeft:70" name="sg_id" id="sg_id">
-                    <option value="" <% if(comp.get(4).equals("0")) { out.print("selected"); } %>>-- Please Select STA Grade --</option>
+                    <option value="0" <% if(comp.get(4).equals("0")) { out.print("selected"); } %>>-- Please Select STA Grade --</option>
                     <% for(int i = 0; i < sg.size(); i++) { %>
                     <option value="<%=sg.get(i).get(0) %>" <% if(comp.get(4).equals(sg.get(i).get(0))) { out.print("selected"); } %>><%=sg.get(i).get(1) %></option>
                     <% } %>
@@ -181,7 +181,7 @@ String weld_family[][] = component.getListFamilies();
             <label for="sup_id" class="col-lg-2 col-md-3 control-label">Supplier</label>
             <div class="col-lg-10 col-md-9">
                 <select class="validate[required] form-control" data-prompt-position="topLeft:70" name="sup_id" id="sup_id">
-                    <option value="" <% if(comp.get(5).equals("0")) { out.print("selected"); } %>>-- Please Select Supplier --</option>
+                    <option value="0" <% if(comp.get(5).equals("0")) { out.print("selected"); } %>>-- Please Select Supplier --</option>
                     <% for(int i = 0; i < sup.size(); i++) { %>
                     <option value="<%=sup.get(i).get(0) %>" <% if(comp.get(5).equals(sup.get(i).get(0))) { out.print("selected"); } %>><%=sup.get(i).get(1) %></option>
                     <% } %>

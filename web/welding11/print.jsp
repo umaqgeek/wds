@@ -9,6 +9,9 @@
     
 //response.setContentType("application/vnd.ms-excel");
 //response.setHeader("Content-Disposition", "inline; filename=test1.xls");
+
+//response.setContentType("application/vnd.ms-word");
+//response.setHeader("Content-Disposition", "inline; filename=word1.doc");
   
 Map<String, String[]> parameters = request.getParameterMap();
 for(String parameter : parameters.keySet()) {
@@ -65,13 +68,14 @@ for(String parameter : parameters.keySet()) {
     ArrayList<String> dataXe1 = new ArrayList<String>();
     ArrayList<String> dataXe2 = new ArrayList<String>();
     
-    int limit = 2000;
+    int limit = Func.LIMIT_ROW_SIZE;
     double avgA[] = new double[limit];
     double avgB[] = new double[limit];
     double avgC[] = new double[limit];
     double avgD[] = new double[limit];
     double avgE1[] = new double[limit];
     double avgE2[] = new double[limit];
+    int avgT[] = new int[limit];
     
     for (int j = 0; j < limit; j++) {
         avgA[j] = 0;
@@ -80,6 +84,7 @@ for(String parameter : parameters.keySet()) {
         avgD[j] = 0;
         avgE1[j] = 0;
         avgE2[j] = 0;
+        avgT[j] = 0;
     }
     
     int filesSize2 = files.get(1).size();
@@ -127,7 +132,7 @@ for(String parameter : parameters.keySet()) {
         } catch (Exception e) {
             e.printStackTrace();
             session.setAttribute("fileExcel", "");
-                session.setAttribute("pageChoosen", ReadFiles.START_PATH + "/");
+                session.setAttribute("pageChoosen", ReadFiles.START_PATH + ReadFiles.START_PATH_SEPARATOR);
                 session.setAttribute("url_content", "welding11/mainMenu.jsp");
                 session.setAttribute("url_menu", "menu/menuAdmin.jsp");
                 session.setAttribute("url_stat", 2);
@@ -150,8 +155,9 @@ for(String parameter : parameters.keySet()) {
             String d[] = prop.getProperty("d").split("\\|");
             String e1[] = prop.getProperty("e1").split("\\|");
             String e2[] = prop.getProperty("e2").split("\\|");
+            String t[] = prop.getProperty("t").split("\\|");
             
-            limit = (c.length < limit) ? (c.length) : (limit);
+            limit = (c.length > limit) ? (c.length) : (limit);
 
             for (int i = 0; i < c.length-1; i++) {
                 
@@ -161,13 +167,14 @@ for(String parameter : parameters.keySet()) {
                 avgD[i] += Double.parseDouble(d[i]);
                 avgE1[i] += Double.parseDouble(e1[i]);
                 avgE2[i] += Double.parseDouble(e2[i]);
+                avgT[i] += (i*5);
                 
             }
             
         } catch (Exception e) {
             e.printStackTrace();
             session.setAttribute("fileExcel", "");
-                session.setAttribute("pageChoosen", ReadFiles.START_PATH + "/");
+                session.setAttribute("pageChoosen", ReadFiles.START_PATH + ReadFiles.START_PATH_SEPARATOR);
                 session.setAttribute("url_content", "welding11/mainMenu.jsp");
                 session.setAttribute("url_menu", "menu/menuAdmin.jsp");
                 session.setAttribute("url_stat", 2);
@@ -177,7 +184,7 @@ for(String parameter : parameters.keySet()) {
     }
     
         for (int i = 0; i < limit-1; i++) {
-            label += "\"" + (i + 1) + "\",";
+            label += (i*5) + ",";
             dataA += (avgA[i]*1.0/filesSize) + ",";
             dataAtol1 += ((avgA[i]*1.0/filesSize)*((100+tolerance1)*1.0/100)) + ",";
             dataAtol2 += ((avgA[i]*1.0/filesSize)*((100-tolerance1)*1.0/100)) + ",";
@@ -197,7 +204,7 @@ for(String parameter : parameters.keySet()) {
             dataE2tol1 += ((avgE2[i]*1.0/filesSize)*((100+tolerance52)*1.0/100)) + ",";
             dataE2tol2 += ((avgE2[i]*1.0/filesSize)*((100-tolerance52)*1.0/100)) + ",";
         }
-        label += "\"" + (limit - 1) + "\"";
+        label += ((limit-1)*5);
         dataA += (avgA[limit - 1]*1.0/filesSize);
         dataAtol1 += ((avgA[limit - 1]*1.0/filesSize)*((100+tolerance1)*1.0/100));
         dataAtol2 += ((avgA[limit - 1]*1.0/filesSize)*((100+tolerance1)*1.0/100));
@@ -218,25 +225,33 @@ for(String parameter : parameters.keySet()) {
         dataE2tol2 += ((avgE2[limit - 1]*1.0/filesSize)*((100+tolerance52)*1.0/100));
 %>
 
-<script src="../assets/js/jquery-1.10.2.min.js"></script>
-<script src="../assets/js/Chart.js"></script>
+<head>
+    <script src="../assets/js/jquery-1.10.2.min.js"></script>
+    <script src="../assets/js/Chart.js"></script>
 
-<script>
-$(document).ready(function() {
-    $("#btnprint").click(function() {
-        $(this).hide();
-        window.print();
+    <script>
+    $(document).ready(function() {
+        $("#btnprint").click(function() {
+            //$(this).hide();
+            window.print();
+        });
     });
-});
-</script>
+    </script>
+</head>
 
-<button type="button" id="btnprint" style="width:200px; height:100px; cursor:pointer;">Print Now</button>
+<% 
+        int width=842;
+        int height=680;
+%>
 
-<h3 class="panel-title warna-title">WELDING CURVE PLOT</h3>
-<hr />
+<!--<div class="row" style="width:<%=width %>; height:<%=height %>;">
+    <button type="button" id="btnprint" style="width:200px; height:100px; cursor:pointer;">Print Now</button>
+</div>-->
 
-<div class="row">
-    <div class="col-md-7" style="margin-left:1%;" id="graf1">
+<!--<h3 class="panel-title warna-title">WELDING CURVE PLOT</h3>-->
+
+<div class="row" style="width:<%=width %>; height:<%=height %>;">
+    <div class="col-md-12" style="margin-left:1%;" id="graf1">
         <h4>Voltage (Tolerance <%=tolerance1 %>%)</h4>
         <table class="table table-striped" width="40%">
             <tr>
@@ -245,18 +260,21 @@ $(document).ready(function() {
             <tr>
                 <td width="30%">Average Line</td>
                 <td width="5%">:</td>
-                <td><div style="background-color:rgba(100,100,100,1);">&nbsp;</div></td>
+                <td><div style="background-color:rgba(100,100,100,1) !important; -webkit-print-color-adjust: exact; ">&nbsp;</div></td>
             </tr>
             <tr>
                 <td>Tolerance Line</td>
                 <td>:</td>
-                <td><div style="background-color:rgba(220,0,0,1);">&nbsp;</div></td>
+                <td><div style="background-color:rgba(220,0,0,1) !important; -webkit-print-color-adjust: exact; ">&nbsp;</div></td>
             </tr>
 <% for (int j = 0; j < dataXa.size(); j++) { %>
             <tr>
-                <td><%=dataXa.get(j).split("\\|")[1] %>&nbsp;</td>
+                <td><%
+                String Xa = dataXa.get(j).split("\\|")[1];
+                out.print(Xa.split(ReadFiles.START_PATH_SEPARATOR)[Xa.split(ReadFiles.START_PATH_SEPARATOR).length-1]);
+                %>&nbsp;</td>
                 <td>:</td>
-                <td><div style="background-color:<%=dataXa.get(j).split("\\|")[2] %>,1);">&nbsp;</div></td>
+                <td><div style="background-color:<%=dataXa.get(j).split("\\|")[2] %>,1) !important; -webkit-print-color-adjust: exact;">&nbsp;</div></td>
             </tr>
 <% } %>
             <tr>
@@ -265,22 +283,24 @@ $(document).ready(function() {
                 <td><%=request.getParameter("komen1") %></td>
             </tr>
         </table>
+    </div>
+</div>
+<div class="row" style="width:<%=width %>; height:<%=height %>;">
+    <div class="col-md-12" style="margin-left:1%;" id="graf1">
         <table>
             <tr>
-                <td><strong>Voltage</strong></td>
+                <td><strong>Voltage (mV)</strong></td>
                 <td width="100%" height="100%"><canvas id="canvas1"></canvas></td>
             </tr>
             <tr>
                 <td></td>
-                <td align="center"><strong>Time</strong></td>
+                <td align="center"><strong>Time (ms)</strong></td>
             </tr>
         </table>
     </div>
 </div>
-            
-<hr />
 
-<div class="row">
+<div class="row" style="width:<%=width %>; height:<%=height %>;">
     <div class="col-md-7" style="margin-left:1%;" id="graf2">
         <h4>Current (Tolerance <%=tolerance2 %>%)</h4>
         <table class="table table-striped" width="40%">
@@ -290,18 +310,21 @@ $(document).ready(function() {
             <tr>
                 <td width="30%">Average Line</td>
                 <td width="5%">:</td>
-                <td><div style="background-color:rgba(100,100,100,1);">&nbsp;</div></td>
+                <td><div style="background-color:rgba(100,100,100,1) !important; -webkit-print-color-adjust: exact; ">&nbsp;</div></td>
             </tr>
             <tr>
                 <td>Tolerance Line</td>
                 <td>:</td>
-                <td><div style="background-color:rgba(220,0,0,1);">&nbsp;</div></td>
+                <td><div style="background-color:rgba(220,0,0,1) !important; -webkit-print-color-adjust: exact; ">&nbsp;</div></td>
             </tr>
 <% for (int j = 0; j < dataXb.size(); j++) { %>
             <tr>
-                <td><%=dataXb.get(j).split("\\|")[1] %>&nbsp;</td>
+                <td><%
+                String Xb = dataXb.get(j).split("\\|")[1];
+                out.print(Xb.split(ReadFiles.START_PATH_SEPARATOR)[Xb.split(ReadFiles.START_PATH_SEPARATOR).length-1]);
+                %>&nbsp;</td>
                 <td>:</td>
-                <td><div style="background-color:<%=dataXb.get(j).split("\\|")[2] %>,1);">&nbsp;</div></td>
+                <td><div style="background-color:<%=dataXb.get(j).split("\\|")[2] %>,1) !important; -webkit-print-color-adjust: exact; ">&nbsp;</div></td>
             </tr>
 <% } %>
             <tr>
@@ -310,22 +333,24 @@ $(document).ready(function() {
                 <td><%=request.getParameter("komen2") %></td>
             </tr>
         </table>
+    </div>
+</div>
+<div class="row" style="width:<%=width %>; height:<%=height %>;">
+    <div class="col-md-12" style="margin-left:1%;" id="graf2">
         <table>
             <tr>
-                <td><strong>Current</strong></td>
+                <td><strong>Current (A)</strong></td>
                 <td width="100%" height="100%"><canvas id="canvas2"></canvas></td>
             </tr>
             <tr>
                 <td></td>
-                <td align="center"><strong>Time</strong></td>
+                <td align="center"><strong>Time (ms)</strong></td>
             </tr>
         </table>
     </div>
 </div>
-            
-<hr />
 
-<div class="row">
+<div class="row" style="width:<%=width %>; height:<%=height %>;">
     <div class="col-md-7" style="margin-left:1%;" id="graf3">
         <h4>Power (Tolerance <%=tolerance3 %>%)</h4>
         <table class="table table-striped" width="40%">
@@ -335,18 +360,21 @@ $(document).ready(function() {
             <tr>
                 <td width="30%">Average Line</td>
                 <td width="5%">:</td>
-                <td><div style="background-color:rgba(100,100,100,1);">&nbsp;</div></td>
+                <td><div style="background-color:rgba(100,100,100,1) !important; -webkit-print-color-adjust: exact; ">&nbsp;</div></td>
             </tr>
             <tr>
                 <td>Tolerance Line</td>
                 <td>:</td>
-                <td><div style="background-color:rgba(220,0,0,1);">&nbsp;</div></td>
+                <td><div style="background-color:rgba(220,0,0,1) !important; -webkit-print-color-adjust: exact; ">&nbsp;</div></td>
             </tr>
 <% for (int j = 0; j < dataXc.size(); j++) { %>
             <tr>
-                <td><%=dataXc.get(j).split("\\|")[1] %>&nbsp;</td>
+                <td><%
+                String Xc = dataXc.get(j).split("\\|")[1];
+                out.print(Xc.split(ReadFiles.START_PATH_SEPARATOR)[Xc.split(ReadFiles.START_PATH_SEPARATOR).length-1]);
+                %>&nbsp;</td>
                 <td>:</td>
-                <td><div style="background-color:<%=dataXc.get(j).split("\\|")[2] %>,1);">&nbsp;</div></td>
+                <td><div style="background-color:<%=dataXc.get(j).split("\\|")[2] %>,1) !important; -webkit-print-color-adjust: exact; ">&nbsp;</div></td>
             </tr>
 <% } %>
             <tr>
@@ -355,22 +383,24 @@ $(document).ready(function() {
                 <td><%=request.getParameter("komen3") %></td>
             </tr>
         </table>
+    </div>
+</div>
+<div class="row" style="width:<%=width %>; height:<%=height %>;">
+    <div class="col-md-12" style="margin-left:1%;" id="graf3">
         <table>
             <tr>
-                <td><strong>Power</strong></td>
+                <td><strong>Power (bar)</strong></td>
                 <td width="100%" height="100%"><canvas id="canvas3"></canvas></td>
             </tr>
             <tr>
                 <td></td>
-                <td align="center"><strong>Time</strong></td>
+                <td align="center"><strong>Time (ms)</strong></td>
             </tr>
         </table>
     </div>
 </div>
-            
-<hr />
 
-<div class="row">
+<div class="row" style="width:<%=width %>; height:<%=height %>;">
     <div class="col-md-7" style="margin-left:1%;" id="graf4">
         <h4>Jaw Displacement (Tolerance <%=tolerance4 %>%)</h4>
         <table class="table table-striped" width="40%">
@@ -380,18 +410,21 @@ $(document).ready(function() {
             <tr>
                 <td width="30%">Average Line</td>
                 <td width="5%">:</td>
-                <td><div style="background-color:rgba(100,100,100,1);">&nbsp;</div></td>
+                <td><div style="background-color:rgba(100,100,100,1) !important; -webkit-print-color-adjust: exact; ">&nbsp;</div></td>
             </tr>
             <tr>
                 <td>Tolerance Line</td>
                 <td>:</td>
-                <td><div style="background-color:rgba(220,0,0,1);">&nbsp;</div></td>
+                <td><div style="background-color:rgba(220,0,0,1) !important; -webkit-print-color-adjust: exact; ">&nbsp;</div></td>
             </tr>
 <% for (int j = 0; j < dataXd.size(); j++) { %>
             <tr>
-                <td><%=dataXd.get(j).split("\\|")[1] %>&nbsp;</td>
+                <td><%
+                String Xd = dataXd.get(j).split("\\|")[1];
+                out.print(Xd.split(ReadFiles.START_PATH_SEPARATOR)[Xd.split(ReadFiles.START_PATH_SEPARATOR).length-1]);
+                %>&nbsp;</td>
                 <td>:</td>
-                <td><div style="background-color:<%=dataXd.get(j).split("\\|")[2] %>,1);">&nbsp;</div></td>
+                <td><div style="background-color:<%=dataXd.get(j).split("\\|")[2] %>,1) !important; -webkit-print-color-adjust: exact; ">&nbsp;</div></td>
             </tr>
 <% } %>
             <tr>
@@ -400,22 +433,24 @@ $(document).ready(function() {
                 <td><%=request.getParameter("komen4") %></td>
             </tr>
         </table>
+    </div>
+</div>
+<div class="row" style="width:<%=width %>; height:<%=height %>;">
+    <div class="col-md-12" style="margin-left:1%;" id="graf4">
         <table>
             <tr>
-                <td><strong>Jaw Displacement</strong></td>
+                <td><strong>Jaw Displacement (mm)</strong></td>
                 <td width="100%" height="100%"><canvas id="canvas4"></canvas></td>
             </tr>
             <tr>
                 <td></td>
-                <td align="center"><strong>Time</strong></td>
+                <td align="center"><strong>Time (ms)</strong></td>
             </tr>
         </table>
     </div>
 </div>
             
-<hr />
-            
-<div class="row">
+<div class="row" style="width:<%=width %>; height:<%=height %>;">
     <div class="col-md-7" style="margin-left:1%;" id="graf5">
         <h4>Pressure 1 (Tolerance <%=tolerance51 %>%) &amp; Pressure 2 (Tolerance <%=tolerance52 %>%)</h4>
         <table class="table table-striped" width="40%">
@@ -425,28 +460,31 @@ $(document).ready(function() {
             <tr>
                 <td width="30%">Average Line of Pressure 1</td>
                 <td width="5%">:</td>
-                <td><div style="background-color:rgba(100,100,200,1);">&nbsp;</div></td>
+                <td><div style="background-color:rgba(100,100,200,1) !important; -webkit-print-color-adjust: exact; ">&nbsp;</div></td>
             </tr>
             <tr>
                 <td>Tolerance Line of Pressure 1</td>
                 <td>:</td>
-                <td><div style="background-color:rgba(200,200,0,1);">&nbsp;</div></td>
+                <td><div style="background-color:rgba(200,200,0,1) !important; -webkit-print-color-adjust: exact; ">&nbsp;</div></td>
             </tr>
             <tr>
                 <td>Average Line of Pressure 2</td>
                 <td>:</td>
-                <td><div style="background-color:rgba(100,100,100,1);">&nbsp;</div></td>
+                <td><div style="background-color:rgba(100,100,100,1) !important; -webkit-print-color-adjust: exact; ">&nbsp;</div></td>
             </tr>
             <tr>
                 <td>Tolerance Line of Pressure 2</td>
                 <td>:</td>
-                <td><div style="background-color:rgba(220,0,0,1);">&nbsp;</div></td>
+                <td><div style="background-color:rgba(220,0,0,1) !important; -webkit-print-color-adjust: exact; ">&nbsp;</div></td>
             </tr>
 <% for (int j = 0; j < dataXe1.size(); j++) { %>
             <tr>
-                <td><%=dataXe1.get(j).split("\\|")[1] %>&nbsp;</td>
+                <td><%
+                String Xe1 = dataXe1.get(j).split("\\|")[1];
+                out.print(Xe1.split(ReadFiles.START_PATH_SEPARATOR)[Xe1.split(ReadFiles.START_PATH_SEPARATOR).length-1]);
+                %>&nbsp;</td>
                 <td>:</td>
-                <td><div style="background-color:<%=dataXe1.get(j).split("\\|")[2] %>,1);">&nbsp;</div></td>
+                <td><div style="background-color:<%=dataXe1.get(j).split("\\|")[2] %>,1) !important; -webkit-print-color-adjust: exact; ">&nbsp;</div></td>
             </tr>
 <% } %>
             <tr>
@@ -455,6 +493,10 @@ $(document).ready(function() {
                 <td><%=request.getParameter("komen5") %></td>
             </tr>
         </table>
+    </div>
+</div>
+<div class="row" style="width:<%=width %>; height:<%=height %>;">
+    <div class="col-md-12" style="margin-left:1%;" id="graf5">
         <table>
             <tr>
                 <td><strong>Pressure</strong></td>
@@ -462,7 +504,7 @@ $(document).ready(function() {
             </tr>
             <tr>
                 <td></td>
-                <td align="center"><strong>Time</strong></td>
+                <td align="center"><strong>Time (ms)</strong></td>
             </tr>
         </table>
     </div>
@@ -727,7 +769,7 @@ $(document).ready(function() {
         var ctx5 = document.getElementById("canvas5").getContext("2d");
         var options = {
             responsive: true,
-            showXLabels: <%=(limit*1.0/100) %>,
+            showXLabels: <%=(limit*1.0/10) %>,
             pointDot: false
         };
         window.myLine = new Chart(ctx1).Line(lineChartData1, options);
@@ -735,6 +777,9 @@ $(document).ready(function() {
         window.myLine = new Chart(ctx3).Line(lineChartData3, options);
         window.myLine = new Chart(ctx4).Line(lineChartData4, options);
         window.myLine = new Chart(ctx5).Line(lineChartData5, options);
+        
+        alert('Press <ctrl>+<p> to print this page!');
+//        window.print();
     }
 
 /*
@@ -764,7 +809,7 @@ $(document).ready(function() {
             });
         });
     });
-*/
+//*/
 
 });
 </script>

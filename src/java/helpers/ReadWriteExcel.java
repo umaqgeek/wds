@@ -37,6 +37,7 @@ public class ReadWriteExcel {
              * c) Power versus Time (Volt X Current) 
              * d) Jaw displacement versus Time (Column K) // (10,7) -> (10, null) 
              * e) Pressure, P1 and P2 versus Time (Column Q & S)  // (16 & 18,7)->(16 & 18,null)
+             * f) Time (Column F) // (5,7) -> (5, null)
              */
             
             ArrayList<String> a1 = new ArrayList<String>();
@@ -47,7 +48,8 @@ public class ReadWriteExcel {
             String d = "";
             String e1 = "";
             String e2 = "";
-            for (int i = 7; i < 200; i++) {
+            String t = "";
+            for (int i = 7; i < Func.LIMIT_ROW_SIZE; i++) {
                 try {
                     Cell cella = sheet.getCell(14, i);
                     if (cella.getContents() != null && !cella.getContents().equals("")) {
@@ -71,6 +73,10 @@ public class ReadWriteExcel {
                     if (celle2.getContents() != null && !celle2.getContents().equals("")) {
                         e2 += celle2.getContents() + "|";
                     }
+                    Cell cellt = sheet.getCell(5, i);
+                    if (cellt.getContents() != null && !cellt.getContents().equals("")) {
+                        t += cellt.getContents() + "|";
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -80,6 +86,7 @@ public class ReadWriteExcel {
             prop.setProperty("d", d);
             prop.setProperty("e1", e1);
             prop.setProperty("e2", e2);
+            prop.setProperty("t", t);
             
             String c = "";
             int sizeab = (a1.size() > b1.size()) ? (b1.size()) : (a1.size());
