@@ -240,8 +240,8 @@ for(String parameter : parameters.keySet()) {
 </head>
 
 <% 
-        int width=842;
-        int height=680;
+        int height=980;
+        int width=680;
 %>
 
 <!--<div class="row" style="width:<%=width %>; height:<%=height %>;">
@@ -284,8 +284,8 @@ for(String parameter : parameters.keySet()) {
             </tr>
         </table>
     </div>
-</div>
-<div class="row" style="width:<%=width %>; height:<%=height %>;">
+<!--</div>
+<div class="row" style="width:<%=width %>; height:<%=height %>;">-->
     <div class="col-md-12" style="margin-left:1%;" id="graf1">
         <table>
             <tr>
@@ -297,6 +297,10 @@ for(String parameter : parameters.keySet()) {
                 <td align="center"><strong>Time (ms)</strong></td>
             </tr>
         </table>
+    </div>
+    <div class="col-md-12" style="margin-left:1%;">
+        Printed by: <%=session.getAttribute("u_fullname") %> (<%=session.getAttribute("u_username") %>)<br />
+        Date: <%=Func.getTodayDate2() %>
     </div>
 </div>
 
@@ -334,8 +338,8 @@ for(String parameter : parameters.keySet()) {
             </tr>
         </table>
     </div>
-</div>
-<div class="row" style="width:<%=width %>; height:<%=height %>;">
+<!--</div>
+<div class="row" style="width:<%=width %>; height:<%=height %>;">-->
     <div class="col-md-12" style="margin-left:1%;" id="graf2">
         <table>
             <tr>
@@ -347,6 +351,10 @@ for(String parameter : parameters.keySet()) {
                 <td align="center"><strong>Time (ms)</strong></td>
             </tr>
         </table>
+    </div>
+    <div class="col-md-12" style="margin-left:1%;">
+        Printed by: <%=session.getAttribute("u_fullname") %> (<%=session.getAttribute("u_username") %>)<br />
+        Date: <%=Func.getTodayDate2() %>
     </div>
 </div>
 
@@ -384,8 +392,8 @@ for(String parameter : parameters.keySet()) {
             </tr>
         </table>
     </div>
-</div>
-<div class="row" style="width:<%=width %>; height:<%=height %>;">
+<!--</div>
+<div class="row" style="width:<%=width %>; height:<%=height %>;">-->
     <div class="col-md-12" style="margin-left:1%;" id="graf3">
         <table>
             <tr>
@@ -397,6 +405,10 @@ for(String parameter : parameters.keySet()) {
                 <td align="center"><strong>Time (ms)</strong></td>
             </tr>
         </table>
+    </div>
+    <div class="col-md-12" style="margin-left:1%;">
+        Printed by: <%=session.getAttribute("u_fullname") %> (<%=session.getAttribute("u_username") %>)<br />
+        Date: <%=Func.getTodayDate2() %>
     </div>
 </div>
 
@@ -434,8 +446,8 @@ for(String parameter : parameters.keySet()) {
             </tr>
         </table>
     </div>
-</div>
-<div class="row" style="width:<%=width %>; height:<%=height %>;">
+<!--</div>
+<div class="row" style="width:<%=width %>; height:<%=height %>;">-->
     <div class="col-md-12" style="margin-left:1%;" id="graf4">
         <table>
             <tr>
@@ -447,6 +459,10 @@ for(String parameter : parameters.keySet()) {
                 <td align="center"><strong>Time (ms)</strong></td>
             </tr>
         </table>
+    </div>
+    <div class="col-md-12" style="margin-left:1%;">
+        Printed by: <%=session.getAttribute("u_fullname") %> (<%=session.getAttribute("u_username") %>)<br />
+        Date: <%=Func.getTodayDate2() %>
     </div>
 </div>
             
@@ -494,8 +510,8 @@ for(String parameter : parameters.keySet()) {
             </tr>
         </table>
     </div>
-</div>
-<div class="row" style="width:<%=width %>; height:<%=height %>;">
+<!--</div>
+<div class="row" style="width:<%=width %>; height:<%=height %>;">-->
     <div class="col-md-12" style="margin-left:1%;" id="graf5">
         <table>
             <tr>
@@ -507,6 +523,10 @@ for(String parameter : parameters.keySet()) {
                 <td align="center"><strong>Time (ms)</strong></td>
             </tr>
         </table>
+    </div>
+    <div class="col-md-12" style="margin-left:1%;">
+        Printed by: <%=session.getAttribute("u_fullname") %> (<%=session.getAttribute("u_username") %>)<br />
+        Date: <%=Func.getTodayDate2() %>
     </div>
 </div>
 
